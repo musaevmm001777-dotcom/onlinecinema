@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRIME CINEMA</title>
+    <!-- Официальный скрипт Telegram WebApp -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    
+    <style>
+        /* Плавный и четкий дизайн в стиле Netflix/Кинопоиск */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #0b0f19;
+            color: #ffffff;
+            margin: 0;
+            padding: 15px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        h1 {
+            font-size: 26px;
+            font-weight: 800;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        p {
+            color: #8a99ad;
+            font-size: 14px;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
+        .catalog {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .movie-card {
+            background: #171e2e;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.03);
+            transition: transform 0.2s ease;
+        }
+
+        .movie-card:active {
+            transform: scale(0.98);
+        }
+
+        .poster-placeholder {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 900;
+            letter-spacing: 6px;
+            color: #ff4b2b;
+            text-shadow: 0 0 20px rgba(255, 75, 43, 0.3);
+        }
+
+        .movie-info {
+            padding: 18px;
+        }
+
+        .movie-title {
+            font-size: 19px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .movie-desc {
+            color: #94a3b8;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .season-select {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            color: #fff;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            font-size: 14px;
+            margin-bottom: 15px;
+            outline: none;
+            appearance: none; /* Убираем стандартную стрелку */
+            cursor: pointer;
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(45deg, #ff416c, #ff4b2b);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 65, 108, 0.3);
+            transition: opacity 0.2s;
+        }
+
+        .buy-btn:active {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🔥 PRIME CINEMA</h1>
+    <p>Эксклюзивные сериалы и релизы целиком</p>
+
+    <div class="catalog">
+        
+        <!-- Карточка сериала ХОЛОД -->
+        <div class="movie-card">
+            <div class="poster-placeholder">ХОЛОД</div> 
+            
+            <div class="movie-info">
+                <div class="movie-title">Сериал «Холод» (2026)</div>
+                <div class="movie-desc">Официально вышла только первая серия, но у нас уже доступен весь сезон целиком в высоком качестве.</div>
+                
+                <select class="season-select" id="select-kholod">
+                    <option value="1 Сезон целиком — 490₽">1 Сезон целиком — 490₽</option>
+                    <option value="Только 2 серия — 99₽">Только 2 серия — 99₽</option>
+                </select>
+                
+                <button class="buy-btn" onclick="orderSeries('Холод', 'select-kholod')">Купить доступ</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Открываем на всю высоту
+
+        function orderSeries(title, selectId) {
+            const selectElement = document.getElementById(selectId);
+            const chosenOption = selectElement.value;
+
+            // Показываем красивое всплывающее окно внутри Telegram
+            tg.showPopup({
+                title: 'Оплата заказа',
+                message: `Вы выбрали: "${title}" (${chosenOption}).\n\nДля оплаты картой и получения ссылки вы будете перенаправлены к администратору.`,
+                buttons: [
+                    {id: 'pay', type: 'default', text: 'Связаться с админом'},
+                    {type: 'cancel', text: 'Отмена'}
+                ]
+            }, function(buttonId) {
+                if (buttonId === 'pay') {
+                    // Перенаправляем пользователя в диалог к тебе (замени тут НА СВОЙ юзернейм в TG без собаки)
+                    tg.openTelegramLink('https://t.me/твой_юзернейм_админа');
+                    tg.close(); // Закрываем Mini App
+                }
+            });
+        }
+    </script>
+</body>
+</html>
