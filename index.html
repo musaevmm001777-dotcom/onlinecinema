@@ -26,6 +26,33 @@
             padding: 16px 16px 80px 16px; /* Отступ снизу для таббара */
             -webkit-font-smoothing: antialiased;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Эффект звездного неба */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 2px;
+            height: 2px;
+            border-radius: 50%;
+            box-shadow: 
+                20vw 10vh #fff, 80vw 15vh rgba(255,255,255,0.7), 45vw 25vh #fff, 15vw 40vh rgba(255,255,255,0.6),
+                70vw 35vh #fff, 90vw 55vh rgba(255,255,255,0.8), 30vw 60vh #fff, 60vw 70vh rgba(255,255,255,0.5),
+                85vw 85vh #fff, 10vw 80vh rgba(255,255,255,0.7), 50vw 90vh #fff, 25vw 95vh rgba(255,255,255,0.6),
+                95vw 30vh #fff, 35vw 15vh rgba(255,255,255,0.5), 65vw 45vh #fff, 5vw 50vh rgba(255,255,255,0.8),
+                75vw 75vh #fff, 55vw 20vh rgba(255,255,255,0.6), 40vw 80vh #fff, 88vw 5vh rgba(255,255,255,0.9);
+            animation: starsBlink 4s infinite ease-in-out alternate;
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        @keyframes starsBlink {
+            0% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.1); }
+            100% { opacity: 0.5; transform: scale(0.9); }
         }
 
         .header {
@@ -41,6 +68,7 @@
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 15px rgba(255, 65, 108, 0.3);
         }
         
         .header p {
@@ -93,6 +121,7 @@
         .tab-btn.active {
             color: #ff4b2b;
             font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 75, 43, 0.4);
         }
 
         /* --- Вкладка Профиль --- */
@@ -142,6 +171,12 @@
             overflow: hidden;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
             cursor: pointer;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .movie-card:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.05);
         }
 
         .poster-placeholder {
@@ -152,6 +187,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: inset 0 -30px 40px rgba(8, 11, 17, 0.8);
         }
 
         .poster-title {
@@ -192,12 +228,13 @@
             border-radius: 12px;
             padding: 12px 14px;
             cursor: pointer;
-            transition: background 0.2s, border-color 0.2s;
+            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
         }
 
         .episode-item:hover, .episode-item.selected {
             background: rgba(255, 65, 108, 0.08);
             border-color: rgba(255, 65, 108, 0.3);
+            box-shadow: 0 0 10px rgba(255, 65, 108, 0.1);
         }
 
         .episode-info {
@@ -215,6 +252,7 @@
             font-size: 12px;
             color: #ff4b2b;
             font-weight: 500;
+            text-shadow: 0 0 8px rgba(255, 75, 43, 0.3);
         }
 
         .lock-icon {
@@ -235,8 +273,8 @@
             font-size: 14px;
             font-weight: 700;
             cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s;
-            box-shadow: 0 4px 12px rgba(255, 65, 108, 0.2);
+            transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 12px rgba(255, 65, 108, 0.2), 0 0 15px rgba(255, 75, 43, 0.2);
         }
 
         .buy-btn:active {
@@ -316,80 +354,80 @@
                 
                 <!-- Лента серий -->
                 <div class="episode-list">
-                    <div class="episode-item" onclick="selectItem(this, 'Весь 1 сезон сериала Холод', '299 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, 'Весь 1 сезон сериала Холод', '119.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">🔥 Весь 1 сезон целиком</div>
-                            <div class="episode-price">299 ₽</div>
+                            <div class="episode-price">119.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '1 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '1 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 1</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '2 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '2 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 2</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '3 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '3 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 3</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '4 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '4 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 4</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '5 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '5 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 5</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '6 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '6 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 6</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '7 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '7 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 7</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '8 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '8 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 8</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '9 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '9 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 9</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
-                    <div class="episode-item" onclick="selectItem(this, '10 серию сериала Холод', '99 рублей')">
+                    <div class="episode-item" onclick="selectItem(this, '10 серию сериала Холод', '19.99 рублей')">
                         <div class="episode-info">
                             <div class="episode-name">Серия 10</div>
-                            <div class="episode-price">99 ₽</div>
+                            <div class="episode-price">19.99 ₽</div>
                         </div>
                         <div class="lock-icon">🔒</div>
                     </div>
