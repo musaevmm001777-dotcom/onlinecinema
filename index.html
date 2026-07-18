@@ -141,6 +141,7 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            cursor: pointer;
         }
 
         .poster-placeholder {
@@ -261,6 +262,21 @@
             opacity: 0.9;
         }
 
+        /* Кнопка назад */
+        .back-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 16px;
+            padding: 0;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
@@ -291,49 +307,113 @@
     <!-- ВКЛАДКА: КАТАЛОГ -->
     <div id="tab-catalog" class="tab-content active">
         <div class="catalog">
-            <div class="movie-card">
+            <div class="movie-card" onclick="switchTab('movie-kholod', document.querySelector('.tab-btn'))">
                 <div class="poster-placeholder">
                     <div class="poster-title">Холод</div>
                 </div> 
                 
                 <div class="movie-info">
                     <div class="movie-title">Сериал «Холод» (2026)</div>
-                    <div class="movie-desc">Выберите интересующую серию или заберите весь сезон с максимальной выгодой.</div>
-                    
-                    <!-- Лента серий -->
-                    <div class="episode-list">
-                        <div class="episode-item" onclick="selectItem(this, 'Весь 1 сезон сериала Холод', '299 рублей')">
-                            <div class="episode-info">
-                                <div class="episode-name">🔥 Весь 1 сезон целиком</div>
-                                <div class="episode-price">299 ₽</div>
-                            </div>
-                            <div class="lock-icon">🔒</div>
-                        </div>
-                        <div class="episode-item" onclick="selectItem(this, '1 серию сериала Холод', '99 рублей')">
-                            <div class="episode-info">
-                                <div class="episode-name">Серия 1</div>
-                                <div class="episode-price">99 ₽</div>
-                            </div>
-                            <div class="lock-icon">🔒</div>
-                        </div>
-                        <div class="episode-item" onclick="selectItem(this, '2 серию сериала Холод', '99 рублей')">
-                            <div class="episode-info">
-                                <div class="episode-name">Серия 2</div>
-                                <div class="episode-price">99 ₽</div>
-                            </div>
-                            <div class="lock-icon">🔒</div>
-                        </div>
-                        <div class="episode-item" onclick="selectItem(this, '3 серию сериала Холод', '99 рублей')">
-                            <div class="episode-info">
-                                <div class="episode-name">Серия 3</div>
-                                <div class="episode-price">99 ₽</div>
-                            </div>
-                            <div class="lock-icon">🔒</div>
-                        </div>
-                    </div>
-                    
-                    <button class="buy-btn" onclick="processOrder()">Купить доступ</button>
+                    <div class="movie-desc">Нажмите на карточку сериала, чтобы посмотреть доступные серии и оформить доступ.</div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- СТРАНИЦА СЕРИАЛА ХОЛОД -->
+    <div id="tab-movie-kholod" class="tab-content">
+        <button class="back-btn" onclick="switchTab('catalog', document.querySelector('.tab-btn'))">← Назад в каталог</button>
+        <div class="movie-card" style="cursor: default;">
+            <div class="poster-placeholder">
+                <div class="poster-title">Холод</div>
+            </div> 
+            
+            <div class="movie-info">
+                <div class="movie-title">Сериал «Холод» (2026)</div>
+                <div class="movie-desc">Выберите интересующую серию или заберите весь сезон с максимальной выгодой.</div>
+                
+                <!-- Лента серий -->
+                <div class="episode-list">
+                    <div class="episode-item" onclick="selectItem(this, 'Весь 1 сезон сериала Холод', '299 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">🔥 Весь 1 сезон целиком</div>
+                            <div class="episode-price">299 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '1 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 1</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '2 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 2</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '3 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 3</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '4 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 4</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '5 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 5</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '6 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 6</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '7 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 7</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '8 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 8</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '9 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 9</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                    <div class="episode-item" onclick="selectItem(this, '10 серию сериала Холод', '99 рублей')">
+                        <div class="episode-info">
+                            <div class="episode-name">Серия 10</div>
+                            <div class="episode-price">99 ₽</div>
+                        </div>
+                        <div class="lock-icon">🔒</div>
+                    </div>
+                </div>
+                
+                <button class="buy-btn" onclick="processOrder()">Купить доступ</button>
             </div>
         </div>
     </div>
@@ -352,9 +432,6 @@
 
     <script>
         const tg = window.Telegram.WebApp;
-        tg.expand();
-
-        // Подгружаем реальные данные из Telegram
         const user = tg.initDataUnsafe?.user;
         if (user) {
             document.getElementById('user-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '') + (user.username ? ` (@${user.username})` : '');
@@ -370,7 +447,13 @@
             document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
             
             document.getElementById(`tab-${tabName}`).classList.add('active');
-            btnElement.classList.add('active');
+            
+            // Если мы переключились на внутреннюю страницу фильма, подсвечиваем кнопку "Каталог" в таб-баре
+            if (tabName === 'movie-kholod') {
+                document.querySelectorAll('.tab-btn')[0].classList.add('active');
+            } else if (btnElement) {
+                btnElement.classList.add('active');
+            }
         }
 
         // Логика выбора позиции в ленте
