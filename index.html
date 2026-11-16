@@ -2,514 +2,683 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#10100f">
     <title>PRIME CINEMA</title>
-    <!-- Официальный скрипт Telegram WebApp -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    
     <style>
         :root {
-            --bg-color: #080b11;
-            --card-bg: rgba(23, 30, 46, 0.4);
-            --card-border: rgba(255, 255, 255, 0.06);
-            --text-main: #ffffff;
-            --text-secondary: #94a3b8;
-            --accent-gradient: linear-gradient(135deg, #ff416c, #ff4b2b);
-            --blur-effect: blur(20px);
+            color-scheme: dark;
+            --background: #10100f;
+            --surface: #191917;
+            --surface-raised: #20201d;
+            --border: rgba(224, 194, 130, 0.16);
+            --gold: #d7b875;
+            --gold-light: #f0d99e;
+            --text: #f5f1e8;
+            --muted: #a7a399;
+            --tab-height: 72px;
+        }
+
+        * {
+            box-sizing: border-box;
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            min-width: 320px;
             margin: 0;
-            padding: 16px 16px 80px 16px; /* Отступ снизу для таббара */
+            padding: 0 0 calc(var(--tab-height) + env(safe-area-inset-bottom) + 22px);
+            background:
+                radial-gradient(ellipse at 50% -20%, rgba(181, 145, 75, 0.16), transparent 48%),
+                var(--background);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             -webkit-font-smoothing: antialiased;
-            overflow-x: hidden;
-            position: relative;
         }
 
-        /* Эффект звездного неба */
-        body::before {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 2px;
-            height: 2px;
-            border-radius: 50%;
-            box-shadow: 
-                20vw 10vh #fff, 80vw 15vh rgba(255,255,255,0.7), 45vw 25vh #fff, 15vw 40vh rgba(255,255,255,0.6),
-                70vw 35vh #fff, 90vw 55vh rgba(255,255,255,0.8), 30vw 60vh #fff, 60vw 70vh rgba(255,255,255,0.5),
-                85vw 85vh #fff, 10vw 80vh rgba(255,255,255,0.7), 50vw 90vh #fff, 25vw 95vh rgba(255,255,255,0.6),
-                95vw 30vh #fff, 35vw 15vh rgba(255,255,255,0.5), 65vw 45vh #fff, 5vw 50vh rgba(255,255,255,0.8),
-                75vw 75vh #fff, 55vw 20vh rgba(255,255,255,0.6), 40vw 80vh #fff, 88vw 5vh rgba(255,255,255,0.9);
-            animation: starsBlink 4s infinite ease-in-out alternate;
-            z-index: -1;
-            pointer-events: none;
+        button {
+            color: inherit;
+            font: inherit;
         }
 
-        @keyframes starsBlink {
-            0% { opacity: 0.4; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.1); }
-            100% { opacity: 0.5; transform: scale(0.9); }
+        .page-shell {
+            width: min(100%, 620px);
+            margin: 0 auto;
+            padding: 24px 18px 0;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 20px;
+        .brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
         }
-        
-        h1 {
-            font-size: 22px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            margin: 0 0 4px 0;
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 15px rgba(255, 65, 108, 0.3);
-        }
-        
-        .header p {
-            color: var(--text-secondary);
-            font-size: 13px;
+
+        .brand-name {
             margin: 0;
+            color: var(--gold-light);
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 17px;
+            font-weight: 600;
+            letter-spacing: 0.17em;
         }
 
-        /* --- Табы и навигация --- */
-        .tab-content {
+        .brand-mark {
+            color: var(--gold);
+            font-size: 11px;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .intro {
+            margin: 0 0 22px;
+        }
+
+        .eyebrow {
+            margin: 0 0 9px;
+            color: var(--gold);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+        }
+
+        .intro h2,
+        .profile-heading {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: clamp(29px, 8vw, 38px);
+            font-weight: 400;
+            letter-spacing: -0.035em;
+            line-height: 1.08;
+        }
+
+        .intro-copy {
+            margin: 11px 0 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+
+        .tab-content[hidden],
+        .series-detail[hidden] {
             display: none;
-            animation: fadeIn 0.4s ease;
         }
 
-        .tab-content.active {
+        .catalog-grid {
+            display: grid;
+            gap: 18px;
+        }
+
+        .series-card {
+            position: relative;
             display: block;
+            width: 100%;
+            min-height: 280px;
+            overflow: hidden;
+            padding: 0;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background-color: #292720;
+            background-image:
+                linear-gradient(180deg, rgba(10, 10, 9, 0.02) 15%, rgba(10, 10, 9, 0.4) 48%, #11110f 100%),
+                var(--poster);
+            background-position: center;
+            background-size: cover;
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 180ms ease, transform 180ms ease;
+        }
+
+        .series-card:active {
+            transform: scale(0.99);
+        }
+
+        .series-card:focus-visible,
+        .episode-option:focus-visible,
+        .action-button:focus-visible,
+        .back-button:focus-visible,
+        .tab-button:focus-visible {
+            outline: 2px solid var(--gold-light);
+            outline-offset: 3px;
+        }
+
+        .series-card:hover {
+            border-color: rgba(240, 217, 158, 0.48);
+        }
+
+        .card-content {
+            position: absolute;
+            right: 20px;
+            bottom: 20px;
+            left: 20px;
+        }
+
+        .card-label {
+            display: inline-flex;
+            margin-bottom: 10px;
+            padding: 6px 9px;
+            border: 1px solid rgba(240, 217, 158, 0.32);
+            border-radius: 999px;
+            background: rgba(12, 12, 11, 0.45);
+            color: var(--gold-light);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .card-title {
+            display: block;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 29px;
+            line-height: 1.08;
+        }
+
+        .card-meta {
+            display: block;
+            margin-top: 8px;
+            color: rgba(245, 241, 232, 0.74);
+            font-size: 13px;
+        }
+
+        .series-detail {
+            animation: reveal 220ms ease both;
+        }
+
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 9px;
+            margin: 0 0 16px;
+            padding: 8px 0;
+            border: 0;
+            background: none;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 13px;
+        }
+
+        .detail-poster {
+            position: relative;
+            min-height: 245px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background-color: #292720;
+            background-image:
+                linear-gradient(180deg, rgba(10, 10, 9, 0.02), rgba(10, 10, 9, 0.28) 46%, #11110f 100%),
+                var(--poster);
+            background-position: center 35%;
+            background-size: cover;
+        }
+
+        .detail-poster-copy {
+            position: absolute;
+            right: 20px;
+            bottom: 18px;
+            left: 20px;
+        }
+
+        .detail-title {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 34px;
+            font-weight: 400;
+        }
+
+        .detail-meta {
+            margin: 7px 0 0;
+            color: rgba(245, 241, 232, 0.75);
+            font-size: 13px;
+        }
+
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 24px 0 12px;
+        }
+
+        .section-heading h3 {
+            margin: 0;
+            font-family: Georgia, "Times New Roman", serif;
+            font-size: 20px;
+            font-weight: 400;
+        }
+
+        .section-heading span {
+            color: var(--muted);
+            font-size: 12px;
+        }
+
+        .episode-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .episode-option {
+            display: flex;
+            width: 100%;
+            min-height: 58px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            padding: 11px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.07);
+            border-radius: 12px;
+            background: var(--surface);
+            cursor: pointer;
+            text-align: left;
+            transition: background 160ms ease, border-color 160ms ease;
+        }
+
+        .episode-option:hover,
+        .episode-option.selected {
+            border-color: rgba(215, 184, 117, 0.52);
+            background: var(--surface-raised);
+        }
+
+        .episode-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .episode-description {
+            display: block;
+            margin-top: 4px;
+            color: var(--muted);
+            font-size: 11px;
+            font-weight: 400;
+        }
+
+        .episode-price {
+            flex: 0 0 auto;
+            color: var(--gold-light);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .action-button {
+            width: 100%;
+            min-height: 52px;
+            margin-top: 16px;
+            border: 1px solid rgba(240, 217, 158, 0.5);
+            border-radius: 12px;
+            background: linear-gradient(135deg, #d7b875, #b5924d);
+            color: #17140e;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            transition: filter 160ms ease, transform 160ms ease;
+        }
+
+        .action-button:hover {
+            filter: brightness(1.08);
+        }
+
+        .action-button:active {
+            transform: scale(0.99);
+        }
+
+        .profile-card {
+            padding: 21px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: linear-gradient(145deg, rgba(215, 184, 117, 0.08), transparent 70%), var(--surface);
+        }
+
+        .profile-heading {
+            font-size: 28px;
+        }
+
+        .profile-field {
+            margin-top: 22px;
+        }
+
+        .profile-label {
+            margin-bottom: 6px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+        }
+
+        .profile-value {
+            overflow-wrap: anywhere;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .profile-note {
+            margin: 20px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.55;
         }
 
         .tab-bar {
             position: fixed;
+            z-index: 5;
+            right: 0;
             bottom: 0;
             left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(13, 18, 30, 0.8);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border-top: 1px solid var(--card-border);
             display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 100;
+            height: calc(var(--tab-height) + env(safe-area-inset-bottom));
+            justify-content: center;
+            gap: 38px;
+            padding: 9px 16px calc(9px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--border);
+            background: rgba(17, 17, 15, 0.94);
+            -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(18px);
         }
 
-        .tab-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 13px;
-            font-weight: 500;
-            padding: 8px 16px;
-            cursor: pointer;
-            transition: color 0.3s, transform 0.2s;
+        .tab-button {
             display: flex;
+            min-width: 82px;
             flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .tab-btn.active {
-            color: #ff4b2b;
-            font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 75, 43, 0.4);
-        }
-
-        /* --- Вкладка Профиль --- */
-        .profile-card {
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 16px;
-            padding: 20px;
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-        }
-
-        .profile-item {
-            margin-bottom: 14px;
-        }
-
-        .profile-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .profile-label {
-            font-size: 12px;
-            color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .profile-value {
-            font-size: 16px;
-            font-weight: 600;
-        }
-
-        /* --- Вкладка Каталог --- */
-        .catalog {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .movie-card {
-            background: var(--card-bg);
-            backdrop-filter: var(--blur-effect);
-            -webkit-backdrop-filter: var(--blur-effect);
-            border: 1px solid var(--card-border);
-            border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: border-color 0.3s, box-shadow 0.3s;
-        }
-
-        .movie-card:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 255, 255, 0.05);
-        }
-
-        .poster-placeholder {
-            width: 100%;
-            height: 180px;
-            background: url('1.jpg') center/cover no-repeat;
-            position: relative;
-            display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: inset 0 -30px 40px rgba(8, 11, 17, 0.8);
-        }
-
-        .poster-title {
-            display: none;
-        }
-
-        .movie-info {
-            padding: 16px;
-        }
-
-        .movie-title {
-            font-size: 17px;
-            font-weight: 700;
-            margin-bottom: 6px;
-        }
-
-        .movie-desc {
-            color: var(--text-secondary);
-            font-size: 12px;
-            line-height: 1.4;
-            margin-bottom: 16px;
-        }
-
-        /* --- Лента серий с замками --- */
-        .episode-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 16px;
-        }
-
-        .episode-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(15, 23, 42, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            padding: 12px 14px;
-            cursor: pointer;
-            transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .episode-item:hover, .episode-item.selected {
-            background: rgba(255, 65, 108, 0.08);
-            border-color: rgba(255, 65, 108, 0.3);
-            box-shadow: 0 0 10px rgba(255, 65, 108, 0.1);
-        }
-
-        .episode-info {
-            display: flex;
-            flex-direction: column;
-            gap: 2px;
-        }
-
-        .episode-name {
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .episode-price {
-            font-size: 12px;
-            color: #ff4b2b;
-            font-weight: 500;
-            text-shadow: 0 0 8px rgba(255, 75, 43, 0.3);
-        }
-
-        .lock-icon {
-            font-size: 14px;
-            opacity: 0.7;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Кнопка действия */
-        .buy-btn {
-            width: 100%;
-            padding: 13px;
-            background: var(--accent-gradient);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.2s, opacity 0.2s, box-shadow 0.2s;
-            box-shadow: 0 4px 12px rgba(255, 65, 108, 0.2), 0 0 15px rgba(255, 75, 43, 0.2);
-        }
-
-        .buy-btn:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-
-        /* Кнопка назад */
-        .back-btn {
-            background: none;
-            border: none;
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
             gap: 4px;
-            margin-bottom: 16px;
-            padding: 0;
+            border: 0;
+            background: transparent;
+            color: var(--muted);
+            cursor: pointer;
+            font-size: 11px;
         }
 
-        @keyframes fadeIn {
+        .tab-button.active {
+            color: var(--gold-light);
+        }
+
+        .tab-icon {
+            font-size: 17px;
+            line-height: 1;
+        }
+
+        @keyframes reveal {
             from { opacity: 0; transform: translateY(5px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (min-width: 520px) {
+            .page-shell {
+                padding-top: 30px;
+            }
+
+            .catalog-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
+            }
+
+            .series-card {
+                min-height: 340px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
     </style>
 </head>
 <body>
+    <main class="page-shell">
+        <header class="brand">
+            <h1 class="brand-name">PRIME CINEMA</h1>
+            <span class="brand-mark">Private collection</span>
+        </header>
 
-    <div class="header">
-        <h1>PRIME CINEMA</h1>
-        <p>Премиум доступ к релизам</p>
-    </div>
-
-    <!-- ВКЛАДКА: ПРОФИЛЬ -->
-    <div id="tab-profile" class="tab-content">
-        <div class="profile-card">
-            <div class="profile-item">
-                <div class="profile-label">Имя пользователя</div>
-                <div class="profile-value" id="user-name">Загрузка...</div>
-            </div>
-            <div class="profile-item">
-                <div class="profile-label">Telegram ID</div>
-                <div class="profile-value" id="user-id">Загрузка...</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ВКЛАДКА: КАТАЛОГ -->
-    <div id="tab-catalog" class="tab-content active">
-        <div class="catalog">
-            <div class="movie-card" onclick="switchTab('movie-kholod', document.querySelector('.tab-btn'))">
-                <div class="poster-placeholder">
-                    <div class="poster-title">Холод</div>
-                </div> 
-                
-                <div class="movie-info">
-                    <div class="movie-title">Сериал «Холод» (2026)</div>
-                    <div class="movie-desc">Нажмите на карточку сериала, чтобы посмотреть доступные серии и оформить доступ.</div>
+        <section id="tab-catalog" class="tab-content">
+            <div id="catalog-view">
+                <div class="intro">
+                    <p class="eyebrow">Избранная коллекция</p>
+                    <h2>Истории, которые остаются</h2>
+                    <p class="intro-copy">Выберите сериал, чтобы посмотреть доступные варианты.</p>
                 </div>
+                <div id="catalog-grid" class="catalog-grid"></div>
             </div>
-        </div>
-    </div>
+            <section id="series-detail" class="series-detail" hidden aria-live="polite"></section>
+        </section>
 
-    <!-- СТРАНИЦА СЕРИАЛА ХОЛОД -->
-    <div id="tab-movie-kholod" class="tab-content">
-        <button class="back-btn" onclick="switchTab('catalog', document.querySelector('.tab-btn'))">← Назад в каталог</button>
-        <div class="movie-card" style="cursor: default;">
-            <div class="poster-placeholder">
-                <div class="poster-title">Холод</div>
-            </div> 
-            
-            <div class="movie-info">
-                <div class="movie-title">Сериал «Холод» (2026)</div>
-                <div class="movie-desc">Выберите интересующую серию или заберите весь сезон с максимальной выгодой.</div>
-                
-                <!-- Лента серий -->
-                <div class="episode-list">
-                    <div class="episode-item" onclick="selectItem(this, 'Весь 1 сезон сериала Холод', '119.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">🔥 Весь 1 сезон целиком</div>
-                            <div class="episode-price">119.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '1 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 1</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '2 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 2</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '3 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 3</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '4 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 4</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '5 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 5</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '6 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 6</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '7 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 7</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '8 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 8</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '9 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 9</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
-                    <div class="episode-item" onclick="selectItem(this, '10 серию сериала Холод', '19.99 рублей')">
-                        <div class="episode-info">
-                            <div class="episode-name">Серия 10</div>
-                            <div class="episode-price">19.99 ₽</div>
-                        </div>
-                        <div class="lock-icon">🔒</div>
-                    </div>
+        <section id="tab-profile" class="tab-content" hidden>
+            <div class="intro">
+                <p class="eyebrow">Ваш аккаунт</p>
+                <h2>Профиль</h2>
+                <p class="intro-copy">Данные Telegram-аккаунта, с которого открыт каталог.</p>
+            </div>
+            <div class="profile-card">
+                <h3 class="profile-heading">Личные данные</h3>
+                <div class="profile-field">
+                    <div class="profile-label">Имя пользователя</div>
+                    <div class="profile-value" id="user-name">Не удалось определить</div>
                 </div>
-                
-                <button class="buy-btn" onclick="processOrder()">Купить доступ</button>
+                <div class="profile-field">
+                    <div class="profile-label">Telegram ID</div>
+                    <div class="profile-value" id="user-id">Недоступен</div>
+                </div>
+                <p class="profile-note">Для вопросов по заказу или доступу напишите администратору.</p>
             </div>
-        </div>
-    </div>
+        </section>
+    </main>
 
-    <!-- Нижний таб-бар -->
-    <div class="tab-bar">
-        <button class="tab-btn active" onclick="switchTab('catalog', this)">
-            <span>🎬</span>
+    <nav class="tab-bar" aria-label="Основная навигация">
+        <button class="tab-button active" type="button" data-tab="catalog" aria-current="page">
+            <span class="tab-icon" aria-hidden="true">⌂</span>
             <span>Каталог</span>
         </button>
-        <button class="tab-btn" onclick="switchTab('profile', this)">
-            <span>👤</span>
+        <button class="tab-button" type="button" data-tab="profile">
+            <span class="tab-icon" aria-hidden="true">◉</span>
             <span>Профиль</span>
         </button>
-    </div>
+    </nav>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        const user = tg.initDataUnsafe?.user;
-        if (user) {
-            document.getElementById('user-name').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '') + (user.username ? ` (@${user.username})` : '');
-            document.getElementById('user-id').innerText = user.id;
-        } else {
-            document.getElementById('user-name').innerText = 'Неизвестный пользователь';
-            document.getElementById('user-id').innerText = '000000000';
-        }
-
-        // Логика переключения вкладок
-        function switchTab(tabName, btnElement) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
-            
-            document.getElementById(`tab-${tabName}`).classList.add('active');
-            
-            // Если мы переключились на внутреннюю страницу фильма, подсвечиваем кнопку "Каталог" в таб-баре
-            if (tabName === 'movie-kholod') {
-                document.querySelectorAll('.tab-btn')[0].classList.add('active');
-            } else if (btnElement) {
-                btnElement.classList.add('active');
+        const tg = window.Telegram?.WebApp;
+        const adminUrl = 'https://t.me/scugi';
+        const products = [
+            {
+                id: 'aida',
+                title: 'Айда',
+                poster: '2.jpg',
+                episodes: 8,
+                description: 'Полный сезон и отдельные серии доступны для заказа.'
+            },
+            {
+                id: 'heavy-lux',
+                title: 'Тяжелый люкс',
+                poster: '1.jpg',
+                episodes: 8,
+                description: 'Полный сезон и отдельные серии доступны для заказа.'
             }
-        }
+        ];
 
-        // Логика выбора позиции в ленте
         let selectedProduct = null;
-        function selectItem(element, productName, price) {
-            document.querySelectorAll('.episode-item').forEach(el => el.classList.remove('selected'));
-            element.classList.add('selected');
-            selectedProduct = { name: productName, price: price };
+        let currentSeries = null;
+
+        if (tg) {
+            tg.ready();
+            tg.expand();
         }
 
-        // Обработка клика по кнопке купить
-        function processOrder() {
-            if (!selectedProduct) {
-                tg.showAlert('Пожалуйста, выберите серию или сезон из списка!');
+        const telegramUser = tg?.initDataUnsafe?.user;
+        if (telegramUser) {
+            const fullName = [telegramUser.first_name, telegramUser.last_name]
+                .filter(Boolean)
+                .join(' ');
+            document.getElementById('user-name').textContent =
+                fullName + (telegramUser.username ? ` (@${telegramUser.username})` : '');
+            document.getElementById('user-id').textContent = String(telegramUser.id);
+        }
+
+        function renderCatalog() {
+            const catalogGrid = document.getElementById('catalog-grid');
+            catalogGrid.innerHTML = products.map((product) => `
+                <button class="series-card" type="button" data-series="${product.id}"
+                    style="--poster: url('${product.poster}')">
+                    <span class="card-content">
+                        <span class="card-label">Сериал · ${product.episodes} серий</span>
+                        <span class="card-title">${product.title}</span>
+                        <span class="card-meta">Открыть сериал&nbsp; →</span>
+                    </span>
+                </button>
+            `).join('');
+        }
+
+        function openSeries(seriesId) {
+            const product = products.find((item) => item.id === seriesId);
+            if (!product) {
                 return;
             }
 
-            tg.showPopup({
-                title: 'Покупка доступа',
-                message: `Для оплаты и получения доступа необходимо связаться с администратором.`,
-                buttons: [
-                    {id: 'contact', type: 'default', text: 'Связаться'},
-                    {type: 'cancel', text: 'Отмена'}
-                ]
-            }, function(buttonId) {
-                if (buttonId === 'contact') {
-                    // Формируем красивый текст для админа
-                    const textTemplate = `Здравствуйте, хочу приобрести ${selectedProduct.name} за ${selectedProduct.price}`;
-                    const encodedText = encodeURIComponent(textTemplate);
-                    
-                    // Перенаправление с автозаполнением сообщения
-                    tg.openTelegramLink(`https://t.me/volter_tut?text=${encodedText}`);
-                    tg.close();
+            currentSeries = product;
+            selectedProduct = null;
+            document.getElementById('catalog-view').hidden = true;
+            const detail = document.getElementById('series-detail');
+            detail.hidden = false;
+            detail.innerHTML = `
+                <button class="back-button" type="button" data-back>
+                    <span aria-hidden="true">←</span> Все сериалы
+                </button>
+                <div class="detail-poster" style="--poster: url('${product.poster}')">
+                    <div class="detail-poster-copy">
+                        <p class="eyebrow">Эксклюзивная коллекция</p>
+                        <h2 class="detail-title">${product.title}</h2>
+                        <p class="detail-meta">1 сезон · ${product.episodes} серий</p>
+                    </div>
+                </div>
+                <div class="section-heading">
+                    <h3>Выберите доступ</h3>
+                    <span>Оплата через администратора</span>
+                </div>
+                <div class="episode-list">
+                    <button class="episode-option" type="button" data-kind="season">
+                        <span>
+                            <span class="episode-name">Весь 1 сезон</span>
+                            <span class="episode-description">Доступ ко всем сериям</span>
+                        </span>
+                        <span class="episode-price">119,99 ₽</span>
+                    </button>
+                    ${Array.from({ length: product.episodes }, (_, index) => `
+                        <button class="episode-option" type="button" data-kind="episode" data-episode="${index + 1}">
+                            <span>
+                                <span class="episode-name">Серия ${index + 1}</span>
+                                <span class="episode-description">Отдельный доступ</span>
+                            </span>
+                            <span class="episode-price">19,99 ₽</span>
+                        </button>
+                    `).join('')}
+                </div>
+                <button class="action-button" type="button" data-order>Связаться для покупки</button>
+            `;
+        }
+
+        function showTab(tabName) {
+            document.getElementById('tab-catalog').hidden = tabName !== 'catalog';
+            document.getElementById('tab-profile').hidden = tabName !== 'profile';
+            document.querySelectorAll('.tab-button').forEach((button) => {
+                const isActive = button.dataset.tab === tabName;
+                button.classList.toggle('active', isActive);
+                if (isActive) {
+                    button.setAttribute('aria-current', 'page');
+                } else {
+                    button.removeAttribute('aria-current');
                 }
             });
         }
+
+        function returnToCatalog() {
+            currentSeries = null;
+            selectedProduct = null;
+            document.getElementById('series-detail').hidden = true;
+            document.getElementById('catalog-view').hidden = false;
+        }
+
+        function contactAdmin() {
+            if (!selectedProduct) {
+                const message = 'Сначала выберите сезон или серию.';
+                if (tg) {
+                    tg.showAlert(message);
+                } else {
+                    window.alert(message);
+                }
+                return;
+            }
+
+            const text = `Здравствуйте! Хочу приобрести ${selectedProduct.name} за ${selectedProduct.price}.`;
+            const contactUrl = `${adminUrl}?text=${encodeURIComponent(text)}`;
+            const prompt = `Вы выбрали: ${selectedProduct.name} — ${selectedProduct.price}.\nДля оформления заказа перейдите в чат с администратором.`;
+
+            if (tg?.showPopup) {
+                tg.showPopup({
+                    title: 'Оформление заказа',
+                    message: prompt,
+                    buttons: [
+                        { id: 'contact', type: 'default', text: 'Перейти к администратору' },
+                        { type: 'cancel', text: 'Отмена' }
+                    ]
+                }, (buttonId) => {
+                    if (buttonId === 'contact') {
+                        tg.openTelegramLink(contactUrl);
+                    }
+                });
+            } else if (window.confirm(`${prompt}\n\nОткрыть чат с администратором?`)) {
+                window.open(contactUrl, '_blank', 'noopener');
+            }
+        }
+
+        document.querySelector('.tab-bar').addEventListener('click', (event) => {
+            const button = event.target.closest('[data-tab]');
+            if (button) {
+                showTab(button.dataset.tab);
+            }
+        });
+
+        document.getElementById('catalog-grid').addEventListener('click', (event) => {
+            const card = event.target.closest('[data-series]');
+            if (card) {
+                openSeries(card.dataset.series);
+            }
+        });
+
+        document.getElementById('series-detail').addEventListener('click', (event) => {
+            const backButton = event.target.closest('[data-back]');
+            if (backButton) {
+                returnToCatalog();
+                return;
+            }
+
+            const option = event.target.closest('[data-kind]');
+            if (option) {
+                document.querySelectorAll('.episode-option').forEach((item) => {
+                    item.classList.toggle('selected', item === option);
+                });
+                const isSeason = option.dataset.kind === 'season';
+                const name = isSeason
+                    ? `${currentSeries.title} — весь 1 сезон`
+                    : `${currentSeries.title} — серия ${option.dataset.episode}`;
+                const price = isSeason ? '119,99 ₽' : '19,99 ₽';
+                selectedProduct = { name, price };
+                return;
+            }
+
+            if (event.target.closest('[data-order]')) {
+                contactAdmin();
+            }
+        });
+
+        renderCatalog();
     </script>
 </body>
 </html>
