@@ -3,20 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#10100f">
+    <meta name="theme-color" content="#111214">
     <title>PRIME CINEMA</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
             color-scheme: dark;
-            --background: #10100f;
-            --surface: #191917;
-            --surface-raised: #20201d;
-            --border: rgba(224, 194, 130, 0.16);
-            --gold: #d7b875;
-            --gold-light: #f0d99e;
-            --text: #f5f1e8;
-            --muted: #a7a399;
+            --background: #111214;
+            --surface: #1b1c1f;
+            --surface-raised: #232529;
+            --border: rgba(255, 255, 255, 0.09);
+            --accent: #c9b894;
+            --text: #f1f1ef;
+            --muted: #a2a3a6;
             --tab-height: 72px;
         }
 
@@ -28,12 +27,14 @@
             min-width: 320px;
             margin: 0;
             padding: 0 0 calc(var(--tab-height) + env(safe-area-inset-bottom) + 22px);
-            background:
-                radial-gradient(ellipse at 50% -20%, rgba(181, 145, 75, 0.16), transparent 48%),
-                var(--background);
+            background: var(--background);
             color: var(--text);
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
             -webkit-font-smoothing: antialiased;
+        }
+
+        body.has-selection {
+            padding-bottom: calc(var(--tab-height) + 82px + env(safe-area-inset-bottom));
         }
 
         button {
@@ -44,53 +45,35 @@
         .page-shell {
             width: min(100%, 620px);
             margin: 0 auto;
-            padding: 24px 18px 0;
+            padding: 20px 16px 0;
         }
 
         .brand {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
+            justify-content: center;
+            margin-bottom: 24px;
         }
 
         .brand-name {
             margin: 0;
-            color: var(--gold-light);
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: 0.17em;
-        }
-
-        .brand-mark {
-            color: var(--gold);
-            font-size: 11px;
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 700;
             letter-spacing: 0.2em;
-            text-transform: uppercase;
         }
 
         .intro {
             margin: 0 0 22px;
         }
 
-        .eyebrow {
-            margin: 0 0 9px;
-            color: var(--gold);
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.2em;
-            text-transform: uppercase;
-        }
-
         .intro h2,
         .profile-heading {
             margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: clamp(29px, 8vw, 38px);
-            font-weight: 400;
-            letter-spacing: -0.035em;
-            line-height: 1.08;
+            font-size: 24px;
+            font-weight: 650;
+            letter-spacing: -0.025em;
+            line-height: 1.2;
         }
 
         .intro-copy {
@@ -114,18 +97,13 @@
             position: relative;
             display: block;
             width: 100%;
-            min-height: 280px;
+            aspect-ratio: 1.18;
             overflow: hidden;
             padding: 0;
             border: 1px solid var(--border);
-            border-radius: 18px;
-            background-color: #292720;
-            background-image:
-                linear-gradient(180deg, rgba(10, 10, 9, 0.02) 15%, rgba(10, 10, 9, 0.4) 48%, #11110f 100%),
-                var(--poster);
-            background-position: center;
-            background-size: cover;
-            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.3);
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2b2d31, #17181b 68%, #242529);
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
             cursor: pointer;
             text-align: left;
             transition: border-color 180ms ease, transform 180ms ease;
@@ -140,40 +118,52 @@
         .action-button:focus-visible,
         .back-button:focus-visible,
         .tab-button:focus-visible {
-            outline: 2px solid var(--gold-light);
+            outline: 2px solid var(--accent);
             outline-offset: 3px;
         }
 
         .series-card:hover {
-            border-color: rgba(240, 217, 158, 0.48);
+            border-color: rgba(255, 255, 255, 0.24);
+        }
+
+        .card-poster {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        .series-card::after {
+            position: absolute;
+            inset: 35% 0 0;
+            background: linear-gradient(180deg, transparent, rgba(10, 11, 12, 0.9));
+            content: "";
+            pointer-events: none;
         }
 
         .card-content {
             position: absolute;
-            right: 20px;
-            bottom: 20px;
-            left: 20px;
+            z-index: 1;
+            right: 18px;
+            bottom: 17px;
+            left: 18px;
         }
 
         .card-label {
             display: inline-flex;
-            margin-bottom: 10px;
-            padding: 6px 9px;
-            border: 1px solid rgba(240, 217, 158, 0.32);
-            border-radius: 999px;
-            background: rgba(12, 12, 11, 0.45);
-            color: var(--gold-light);
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
+            margin-bottom: 7px;
+            color: rgba(255, 255, 255, 0.76);
+            font-size: 11px;
+            font-weight: 500;
         }
 
         .card-title {
             display: block;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 29px;
-            line-height: 1.08;
+            font-size: 25px;
+            font-weight: 650;
+            line-height: 1.15;
         }
 
         .card-meta {
@@ -202,30 +192,42 @@
 
         .detail-poster {
             position: relative;
-            min-height: 245px;
+            aspect-ratio: 1.18;
             overflow: hidden;
             border: 1px solid var(--border);
-            border-radius: 18px;
-            background-color: #292720;
-            background-image:
-                linear-gradient(180deg, rgba(10, 10, 9, 0.02), rgba(10, 10, 9, 0.28) 46%, #11110f 100%),
-                var(--poster);
-            background-position: center 35%;
-            background-size: cover;
+            border-radius: 14px;
+            background: linear-gradient(135deg, #2b2d31, #17181b 68%, #242529);
+        }
+
+        .detail-poster-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center center;
+        }
+
+        .detail-poster::after {
+            position: absolute;
+            inset: 45% 0 0;
+            background: linear-gradient(180deg, transparent, rgba(10, 11, 12, 0.88));
+            content: "";
+            pointer-events: none;
         }
 
         .detail-poster-copy {
             position: absolute;
-            right: 20px;
-            bottom: 18px;
-            left: 20px;
+            z-index: 1;
+            right: 18px;
+            bottom: 16px;
+            left: 18px;
         }
 
         .detail-title {
             margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 34px;
-            font-weight: 400;
+            font-size: 27px;
+            font-weight: 650;
         }
 
         .detail-meta {
@@ -244,9 +246,8 @@
 
         .section-heading h3 {
             margin: 0;
-            font-family: Georgia, "Times New Roman", serif;
-            font-size: 20px;
-            font-weight: 400;
+            font-size: 18px;
+            font-weight: 600;
         }
 
         .section-heading span {
@@ -277,7 +278,7 @@
 
         .episode-option:hover,
         .episode-option.selected {
-            border-color: rgba(215, 184, 117, 0.52);
+            border-color: rgba(201, 184, 148, 0.55);
             background: var(--surface-raised);
         }
 
@@ -296,7 +297,7 @@
 
         .episode-price {
             flex: 0 0 auto;
-            color: var(--gold-light);
+            color: var(--accent);
             font-size: 13px;
             font-weight: 700;
         }
@@ -305,10 +306,10 @@
             width: 100%;
             min-height: 52px;
             margin-top: 16px;
-            border: 1px solid rgba(240, 217, 158, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.14);
             border-radius: 12px;
-            background: linear-gradient(135deg, #d7b875, #b5924d);
-            color: #17140e;
+            background: #e7e5df;
+            color: #17181a;
             cursor: pointer;
             font-size: 14px;
             font-weight: 800;
@@ -324,11 +325,61 @@
             transform: scale(0.99);
         }
 
+        .selection-bar {
+            position: fixed;
+            z-index: 6;
+            right: 0;
+            bottom: calc(var(--tab-height) + env(safe-area-inset-bottom));
+            left: 0;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 14px;
+            border-top: 1px solid var(--border);
+            background: rgba(25, 26, 29, 0.97);
+            -webkit-backdrop-filter: blur(18px);
+            backdrop-filter: blur(18px);
+        }
+
+        .selection-bar.visible {
+            display: flex;
+        }
+
+        .selection-summary {
+            display: flex;
+            min-width: 0;
+            flex: 1;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .selection-name {
+            overflow: hidden;
+            font-size: 12px;
+            font-weight: 600;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .selection-price {
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .selection-bar .action-button {
+            width: auto;
+            min-height: 46px;
+            flex: 0 0 auto;
+            margin: 0;
+            padding: 0 16px;
+        }
+
         .profile-card {
             padding: 21px;
             border: 1px solid var(--border);
             border-radius: 16px;
-            background: linear-gradient(145deg, rgba(215, 184, 117, 0.08), transparent 70%), var(--surface);
+            background: var(--surface);
         }
 
         .profile-heading {
@@ -373,7 +424,7 @@
             gap: 38px;
             padding: 9px 16px calc(9px + env(safe-area-inset-bottom));
             border-top: 1px solid var(--border);
-            background: rgba(17, 17, 15, 0.94);
+            background: rgba(17, 18, 20, 0.96);
             -webkit-backdrop-filter: blur(18px);
             backdrop-filter: blur(18px);
         }
@@ -393,7 +444,7 @@
         }
 
         .tab-button.active {
-            color: var(--gold-light);
+            color: var(--accent);
         }
 
         .tab-icon {
@@ -415,10 +466,6 @@
                 grid-template-columns: repeat(2, minmax(0, 1fr));
                 gap: 14px;
             }
-
-            .series-card {
-                min-height: 340px;
-            }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -437,15 +484,12 @@
     <main class="page-shell">
         <header class="brand">
             <h1 class="brand-name">PRIME CINEMA</h1>
-            <span class="brand-mark">Частная коллекция</span>
         </header>
 
         <section id="tab-catalog" class="tab-content">
             <div id="catalog-view">
                 <div class="intro">
-                    <p class="eyebrow">Избранная коллекция</p>
-                    <h2>Истории, которые остаются</h2>
-                    <p class="intro-copy">Выберите сериал, чтобы посмотреть доступные варианты.</p>
+                    <h2>Каталог сериалов</h2>
                 </div>
                 <div id="catalog-grid" class="catalog-grid"></div>
             </div>
@@ -454,7 +498,6 @@
 
         <section id="tab-profile" class="tab-content" hidden>
             <div class="intro">
-                <p class="eyebrow">Ваш аккаунт</p>
                 <h2>Профиль</h2>
                 <p class="intro-copy">Данные Telegram-аккаунта, с которого открыт каталог.</p>
             </div>
@@ -484,6 +527,14 @@
         </button>
     </nav>
 
+    <div id="selection-bar" class="selection-bar" aria-hidden="true">
+        <div class="selection-summary">
+            <span id="selection-name" class="selection-name"></span>
+            <span id="selection-price" class="selection-price"></span>
+        </div>
+        <button class="action-button" type="button" data-order>Связаться</button>
+    </div>
+
     <script>
         const tg = window.Telegram?.WebApp;
         const adminUrl = 'https://t.me/scugi';
@@ -506,6 +557,7 @@
 
         let selectedProduct = null;
         let currentSeries = null;
+        const selectionBar = document.getElementById('selection-bar');
 
         if (tg) {
             tg.ready();
@@ -525,15 +577,24 @@
         function renderCatalog() {
             const catalogGrid = document.getElementById('catalog-grid');
             catalogGrid.innerHTML = products.map((product) => `
-                <button class="series-card" type="button" data-series="${product.id}"
-                    style="--poster: url('${product.poster}')">
+                <button class="series-card" type="button" data-series="${product.id}">
+                    <img class="card-poster" src="${product.poster}" alt="" loading="lazy">
                     <span class="card-content">
-                        <span class="card-label">Сериал · ${product.episodes} серий</span>
+                        <span class="card-label">${product.episodes} серий</span>
                         <span class="card-title">${product.title}</span>
                         <span class="card-meta">Открыть сериал&nbsp; →</span>
                     </span>
                 </button>
             `).join('');
+            hideUnavailablePosters(catalogGrid);
+        }
+
+        function hideUnavailablePosters(container) {
+            container.querySelectorAll('img').forEach((image) => {
+                image.addEventListener('error', () => {
+                    image.hidden = true;
+                }, { once: true });
+            });
         }
 
         function openSeries(seriesId) {
@@ -544,6 +605,7 @@
 
             currentSeries = product;
             selectedProduct = null;
+            syncSelectionBar();
             document.getElementById('catalog-view').hidden = true;
             const detail = document.getElementById('series-detail');
             detail.hidden = false;
@@ -551,9 +613,9 @@
                 <button class="back-button" type="button" data-back>
                     <span aria-hidden="true">←</span> Все сериалы
                 </button>
-                <div class="detail-poster" style="--poster: url('${product.poster}')">
+                <div class="detail-poster">
+                    <img class="detail-poster-image" src="${product.poster}" alt="Постер сериала «${product.title}»">
                     <div class="detail-poster-copy">
-                        <p class="eyebrow">Эксклюзивная коллекция</p>
                         <h2 class="detail-title">${product.title}</h2>
                         <p class="detail-meta">1 сезон · ${product.episodes} серий</p>
                     </div>
@@ -569,7 +631,7 @@
                             <span class="episode-name">Весь 1 сезон</span>
                             <span class="episode-description">Доступ ко всем сериям</span>
                         </span>
-                        <span class="episode-price">119,99 ₽</span>
+                        <span class="episode-price">399 ₽</span>
                     </button>
                     ${Array.from({ length: product.episodes }, (_, index) => `
                         <button class="episode-option" type="button" data-kind="episode" data-episode="${index + 1}">
@@ -577,12 +639,28 @@
                                 <span class="episode-name">Серия ${index + 1}</span>
                                 <span class="episode-description">Отдельный доступ</span>
                             </span>
-                            <span class="episode-price">19,99 ₽</span>
+                            <span class="episode-price">59 ₽</span>
                         </button>
                     `).join('')}
                 </div>
-                <button class="action-button" type="button" data-order>Связаться для покупки</button>
             `;
+            hideUnavailablePosters(detail);
+        }
+
+        function syncSelectionBar() {
+            const shouldShow = Boolean(
+                selectedProduct &&
+                currentSeries &&
+                !document.getElementById('tab-catalog').hidden
+            );
+            selectionBar.classList.toggle('visible', shouldShow);
+            selectionBar.setAttribute('aria-hidden', String(!shouldShow));
+            document.body.classList.toggle('has-selection', shouldShow);
+
+            if (selectedProduct) {
+                document.getElementById('selection-name').textContent = selectedProduct.name;
+                document.getElementById('selection-price').textContent = selectedProduct.price;
+            }
         }
 
         function showTab(tabName) {
@@ -597,6 +675,7 @@
                     button.removeAttribute('aria-current');
                 }
             });
+            syncSelectionBar();
         }
 
         function returnToCatalog() {
@@ -604,6 +683,7 @@
             selectedProduct = null;
             document.getElementById('series-detail').hidden = true;
             document.getElementById('catalog-view').hidden = false;
+            syncSelectionBar();
         }
 
         function contactAdmin() {
@@ -664,16 +744,20 @@
             if (option) {
                 document.querySelectorAll('.episode-option').forEach((item) => {
                     item.classList.toggle('selected', item === option);
+                    item.setAttribute('aria-pressed', String(item === option));
                 });
                 const isSeason = option.dataset.kind === 'season';
                 const name = isSeason
                     ? `${currentSeries.title} — весь 1 сезон`
                     : `${currentSeries.title} — серия ${option.dataset.episode}`;
-                const price = isSeason ? '119,99 ₽' : '19,99 ₽';
+                const price = isSeason ? '399 ₽' : '59 ₽';
                 selectedProduct = { name, price };
+                syncSelectionBar();
                 return;
             }
+        });
 
+        selectionBar.addEventListener('click', (event) => {
             if (event.target.closest('[data-order]')) {
                 contactAdmin();
             }
